@@ -24,22 +24,26 @@ public class SpendingMessageHandler {
     @ServiceActivator(inputChannel = "add-spending-v1-in")
     public void handleMessage(SpendingMessageDto spendingMessageDto, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) throws MessagingException {
         log.info("Message arrived! Payload: " + spendingMessageDto);
-        try {
-            spendingService.addSpending(spendingMessageDto);
-            message.ack();
-        } catch (CannotAcquireLockException e) {
-            log.error("Message cannot acquire lock. Message must be send again");
-            message.nack();
-        } catch (DataIntegrityViolationException e) {
-            if (e.getCause() != null && e.getCause().getCause() != null &&
-                    e.getCause().getCause().getMessage().contains("idempotency_key")) {
-                log.info("Unique key already exists");
-                message.ack();
-                return;
-            }
+        spendingService.addSpending(spendingMessageDto);
+        log.debug(spendingMessageDto.toString());
+        message.ack();
 
-            log.error("Uff " + e.getClass().getName() + ": " + e.getMessage());
-            message.nack();
-        }
+//        try {
+//            spendingService.addSpending(spendingMessageDto);
+//            message.ack();
+//        } catch (CannotAcquireLockException e) {
+//            log.error("Message cannot acquire lock. Message must be send again");
+//            message.nack();
+//        } catch (DataIntegrityViolationException e) {
+//            if (e.getCause() != null && e.getCause().getCause() != null &&
+//                    e.getCause().getCause().getMessage().contains("idempotency_key")) {
+//                log.info("Unique key already exists");
+//                message.ack();
+//                return;
+//            }
+//
+//            log.error("Uff " + e.getClass().getName() + ": " + e.getMessage());
+//            message.nack();
+//        }
     }
 }

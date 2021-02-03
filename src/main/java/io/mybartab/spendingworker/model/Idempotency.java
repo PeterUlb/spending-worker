@@ -44,7 +44,6 @@ public class Idempotency {
     private LocalDateTime updatedAt;
 
     public void setStatus(IdempotencyStatus status) {
-        System.out.println(status);
         this.status = status;
     }
 }

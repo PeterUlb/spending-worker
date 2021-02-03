@@ -1,18 +1,19 @@
 package io.mybartab.spendingworker.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@Builder
-@EntityListeners(AuditingEntityListener.class)
 public class SpendingGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

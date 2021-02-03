@@ -15,5 +15,6 @@ public interface IdempotencyRepository extends JpaRepository<Idempotency, Long> 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Idempotency> findByIdempotencyKeyPW(String idempotencyKey);
 
-    Optional<Idempotency> findByIdempotencyKey(String idempotencyKey);
+    //    @Query("SELECT new io.mybartab.spendingworker.dto.IdempotencyDto(i.idempotencyKey, i.status, i.code, i.response) FROM Idempotency i where i.idempotencyKey = :idempotencyKey")
+    <T> Optional<T> findByIdempotencyKey(String idempotencyKey, Class<T> type);
 }
