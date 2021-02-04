@@ -1,0 +1,19 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: spending-worker
+data:
+  application.properties: |-
+    app.gcp.keyPath=/var/secrets/google/key.json
+    app.gcp.projectId=test-project-292914
+    server.port=8081
+    logging.level.root=INFO
+    spring.datasource.url=jdbc:h2:mem:testdb
+    spring.datasource.driverClassName=org.h2.Driver
+    spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+    ---
+    spring.profiles=development
+    test.message=Dev
+    ---
+    spring.profiles=production
+    test.message=Prod

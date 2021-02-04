@@ -5,8 +5,6 @@ import com.google.cloud.spring.pubsub.support.GcpPubSubHeaders;
 import io.mybartab.spendingworker.dto.SpendingMessageDto;
 import io.mybartab.spendingworker.service.SpendingService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.CannotAcquireLockException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.handler.annotation.Header;
