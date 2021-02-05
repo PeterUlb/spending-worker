@@ -16,11 +16,5 @@ import org.springframework.validation.annotation.Validated;
 @ToString
 public class GcpProperties {
     @PropertySet
-    private String keyPath;
-
-    @PropertySet
-    private String projectId;
-
-    @PropertySet
     private String subscriptionName;
 }
