@@ -4,16 +4,18 @@ metadata:
   name: spending-worker
 data:
   application.properties: |-
-    app.gcp.keyPath=/var/secrets/google/key.json
     app.gcp.projectId=test-project-292914
-    server.port=8081
+    app.gcp.subscription-name=add-spending-v1-worker
+    app.gcp.keyPath=${GOOGLE_APPLICATION_CREDENTIALS}
+    server.port=8080
     logging.level.root=INFO
     spring.datasource.url=jdbc:h2:mem:testdb
     spring.datasource.driverClassName=org.h2.Driver
     spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
     ---
-    spring.profiles=development
-    test.message=Dev
+    spring.profiles=dev
+    server.error.include-stacktrace=always
     ---
-    spring.profiles=production
-    test.message=Prod
+    spring.profiles=prod
+    server.error.include-stacktrace=never
+    logging.level.root=ERROR
