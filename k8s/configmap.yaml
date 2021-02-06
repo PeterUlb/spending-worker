@@ -7,15 +7,16 @@ data:
     server.port=8080
     app.gcp.subscription-name=add-spending-v1-worker
     logging.level.root=INFO
-    spring.datasource.url=jdbc:h2:mem:testdb
-    spring.datasource.driverClassName=org.h2.Driver
-    spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+    spring.datasource.url=jdbc:postgresql://postgres-service:5432/spending-db
     spring.cloud.kubernetes.reload.enabled=true
     spring.cloud.gcp.credentials.location=file:/etc/secrets/google/key.json
-    ---
+    spring.jpa.hibernate.ddl-auto=update
+  application-dev.properties: |-
     spring.profiles=dev
     server.error.include-stacktrace=always
-    ---
+  application-prod.properties: |-
     spring.profiles=prod
     server.error.include-stacktrace=never
     logging.level.root=ERROR
+    spring.devtools.add-properties=false
+    spring.jpa.hibernate.ddl-auto=validate

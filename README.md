@@ -1,3 +1,59 @@
+# Spending Worker
+Processes spending events and is able to return an accumulated count.
+
+## Requirements
+
+### Components
+- Postgres Database
+   - Either run locally on your PC or on e.g minikube via skaffold (example yaml below)
+- PubSub Cluster
+
+### Secrets
+The following secrets must be provided to run the application on k8s
+
+#### GCP PubSub Key
+
+**Name:** pubsub-key  
+**Value:** key.json=BASE64_FILE_CONTENT  
+**Example:**
+<details>
+
+`kubectl create secret generic pubsub-key --from-file=key.json=PATH-TO-KEY-FILE.json`
+</details>
+
+#### Secrets Configuration
+
+**Name:** spending-worker  
+**Values:**  
+relevant.property.x=BASE64  
+other.property.set=BASE64  
+**Example:**
+<details>
+
+```
+apiVersion: v1
+data:
+  spring.datasource.password: bGV0bWVpbg==
+  spring.datasource.username: ZGV2
+kind: Secret
+metadata:
+  name: spending-worker
+```
+
+`kubectl create secret generic spending-worker --from-literal=spring.datasource.user=username --from-literal=spring.datasource.password=p455w0rd`
+</details>
+
+
+
+
+
+
+# Example YAML
+
+## Postgres
+<details>
+
+```
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -101,3 +157,52 @@ metadata:
 data:
   POSTGRES_DB: "spending-db"
   POSTGRES_USER: "postgres"
+```
+</details>
+
+## Postgres Secrets
+<details>
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-credentials
+type: Opaque
+data:
+  password: BASE64PW
+```
+
+</details>
+
+## Roles
+<details>
+
+```
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+namespace: default
+name: namespace-reader
+rules:
+- apiGroups: [ "", "extensions", "apps" ]
+  resources: [ "configmaps", "pods", "services", "endpoints", "secrets" ]
+  verbs: [ "get", "list", "watch" ]
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+name: namespace-reader-binding
+namespace: default
+subjects:
+- kind: ServiceAccount
+  name: default
+  apiGroup: ""
+  roleRef:
+  kind: Role
+  name: namespace-reader
+  apiGroup: ""
+```
+</details>
